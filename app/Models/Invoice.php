@@ -22,4 +22,9 @@ class Invoice extends Model
     protected $casts = [
         'status' => InvoiceStatus::class,
     ];
+
+    public function invoiceLines() // @phpstan-ignore-line
+    {
+        return $this->hasMany(InvoiceLine::class);
+    }
 }

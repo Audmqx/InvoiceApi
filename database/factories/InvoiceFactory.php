@@ -6,12 +6,15 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 use App\ValueObjects\InvoiceStatus;
+use App\Models\{Invoice, InvoiceLine};
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Invoice>
  */
 class InvoiceFactory extends Factory
 {
+
+    const JUST_A_LINE = 1;
     /**
      * Define the model's default state.
      *
@@ -41,5 +44,14 @@ class InvoiceFactory extends Factory
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ];
+    }
+
+    public function withLines(int $lineCount = self::JUST_A_LINE): self
+    {
+        return $this->afterCreating(function (Invoice $invoice) use ($lineCount) {
+            InvoiceLine::factory()->count($lineCount)->create([
+                'invoice_id' => $invoice->id,
+            ]);
+        });
     }
 }
