@@ -84,7 +84,7 @@ class InvoiceTest extends TestCase
     /**
      * @return array<array{InvoiceStatus, string}>
      */
-    public function statusProvider(): array
+    static public function statusProvider(): array
     {
         return [
             [InvoiceStatus::SENT, 'sent'],
@@ -92,6 +92,16 @@ class InvoiceTest extends TestCase
             [InvoiceStatus::PAID, 'paid'],
             [InvoiceStatus::CANCELLED, 'cancelled'],
         ];
+    }
+
+    public function test_status_is_casted_to_enum(): void
+    {
+        $invoice = Invoice::factory()->create([
+            'status' => InvoiceStatus::SENT,
+        ]);
+
+        $this->assertInstanceOf(InvoiceStatus::class, $invoice->status);
+        $this->assertEquals(InvoiceStatus::SENT, $invoice->status);
     }
 }
 
