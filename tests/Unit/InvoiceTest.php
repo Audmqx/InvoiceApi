@@ -4,6 +4,8 @@ namespace Tests\Unit;
 
 use Tests\TestCase;
 use App\Models\Invoice;
+use App\ValueObjects\InvoiceStatus;
+
 // Enoncé
 // Nous voulons concevoir une API pour accéder à nos factures. 
 
@@ -70,4 +72,26 @@ class InvoiceTest extends TestCase
         $this->assertModelExists($invoice);
         $this->assertDatabaseHas('invoices', $seedInvoice);
     }
+
+    /**
+     * @dataProvider statusProvider
+     */
+    public function test_invoice_status_enum(InvoiceStatus $status, string $expectedValue): void
+    {
+        $this->assertEquals($expectedValue, $status->value);
+    }
+
+    /**
+     * @return array<array{InvoiceStatus, string}>
+     */
+    public function statusProvider(): array
+    {
+        return [
+            [InvoiceStatus::SENT, 'sent'],
+            [InvoiceStatus::LATE, 'late'],
+            [InvoiceStatus::PAID, 'paid'],
+            [InvoiceStatus::CANCELLED, 'cancelled'],
+        ];
+    }
 }
+
