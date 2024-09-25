@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 use Tests\TestCase;
 use App\Models\Invoice;
+use App\Models\InvoiceLine;
 use App\ValueObjects\InvoiceStatus;
 
 // Enoncé
@@ -102,6 +103,19 @@ class InvoiceTest extends TestCase
 
         $this->assertInstanceOf(InvoiceStatus::class, $invoice->status);
         $this->assertEquals(InvoiceStatus::SENT, $invoice->status);
+    }
+
+    public function test_relationship_between_lines_and_invoices(): void
+    {
+        $invoiceLineDummy = [
+            'invoice_id' => Invoice::factory()->create()->id,
+            'amount' => 10.55,
+            'product' => 'ff9'
+        ];
+
+        $invoiceLine = InvoiceLine::factory()->create($invoiceLineDummy);
+        $this->assertModelExists($invoiceLine);
+        $this->assertDatabaseHas('invoice_lines', $invoiceLineDummy);
     }
 }
 
