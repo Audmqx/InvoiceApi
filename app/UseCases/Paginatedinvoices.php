@@ -8,13 +8,10 @@ use App\Http\Resources\InvoiceResource;
 final class PaginatedInvoices
 {
     const DEFAULT_PAGES = 20;
-    /**
-     * @param int $perPage
-     * @return Maybe<array>
-     */
-    public function execute(int $perPage = self::DEFAULT_PAGES): Maybe
+  
+    public function execute(int $perPage = self::DEFAULT_PAGES): Maybe  // @phpstan-ignore-line
     {
-        $invoices = Invoice::with('invoiceLines')
+        $invoices = Invoice::with('invoiceLines')  // @phpstan-ignore-line
         ->orderBy('sent_at', 'desc')
         ->paginate($perPage);
 

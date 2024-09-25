@@ -46,13 +46,6 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 // Un seeder qui ajoute 100 factures automatiquement
 // Un ou plusieurs tests sur cette route
 
-// Bonus 
-
-// Les points suivants ne sont à traiter que s’il vous reste du temps. Nous préférons avoir un travail soigné sur les demandes principales à un travail à revoir mais qui couvre les bonus
-
-// Protéger l’accès à l’API par un mot de passe 1234 passé en paramètre
-// Ajouter 2 paramètres “order-by” et “order” (asc ou desc) pour pouvoir trier par nom du client, date d’envoi, montant total.
-// Ajouter une méthode POST pour ajouter une facture
 
 class InvoiceTest extends TestCase
 {
@@ -95,4 +88,5 @@ class InvoiceTest extends TestCase
         ];
     }
 }
+
 

@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use App\Models\Invoice;
-use Database\Seeders\InvoiceSeeder;
 
 class InvoiceApiTest extends TestCase
 {
@@ -31,6 +30,7 @@ class InvoiceApiTest extends TestCase
                         'status',
                         'sent_at',
                         'paid_at',
+                        'total'
                     ],
                 ],
                 'pagination' => [
@@ -40,5 +40,16 @@ class InvoiceApiTest extends TestCase
                     'last_page',
                 ],
             ]);
+    }
+
+    public function test_returns_404_when_no_invoices_found(): void
+    {
+        $response = $this->getJson('/api/invoices');
+
+        $response->assertStatus(404);
+
+        $response->assertJson([
+            'error' => 'No invoices found',
+        ]);
     }
 }
