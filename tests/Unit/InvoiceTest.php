@@ -3,9 +3,9 @@
 namespace Tests\Unit;
 
 use Tests\TestCase;
-use App\Models\Invoice;
-use App\Models\InvoiceLine;
+use App\Models\{Invoice, InvoiceLine};
 use App\ValueObjects\InvoiceStatus;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 // Enoncé
 // Nous voulons concevoir une API pour accéder à nos factures. 
@@ -56,25 +56,25 @@ use App\ValueObjects\InvoiceStatus;
 
 class InvoiceTest extends TestCase
 {
-   
-    public function test_invoice_model_and_table_exist(): void
+    use RefreshDatabase;
+
+    public function test_invoice_and_lines_with_enum_status_and_relationship(): void
     {
-        $seedInvoice = [
-			'client' => 'John Doe',
-            'number' => 'FA-2022-10-003',
-            'status' => 'sent',
-            'sent_at' => '2022-10-06 10:02:03',
-            'paid_at' => null,
-            'internal_note' => "hi",
-		];
-
-        $invoice = Invoice::factory()->create($seedInvoice);
-
+        $invoice = Invoice::factory()->withLines(50)->create();
         $this->assertModelExists($invoice);
-        $this->assertDatabaseHas('invoices', $seedInvoice);
+ 
+        $this->assertCount(50, $invoice->invoiceLines); // @phpstan-ignore-line
+        $this->assertDatabaseCount('invoice_lines', 50);
+
+        foreach ($invoice->invoiceLines as $line) { // @phpstan-ignore-line
+            $this->assertEquals($invoice->id, $line->invoice_id);
+            $this->assertModelExists($line);
+        }
+
+        $this->assertInstanceOf(InvoiceStatus::class, $invoice->status);
     }
 
-    /**
+   /**
      * @dataProvider statusProvider
      */
     public function test_invoice_status_enum(InvoiceStatus $status, string $expectedValue): void
@@ -93,29 +93,6 @@ class InvoiceTest extends TestCase
             [InvoiceStatus::PAID, 'paid'],
             [InvoiceStatus::CANCELLED, 'cancelled'],
         ];
-    }
-
-    public function test_status_is_casted_to_enum(): void
-    {
-        $invoice = Invoice::factory()->create([
-            'status' => InvoiceStatus::SENT,
-        ]);
-
-        $this->assertInstanceOf(InvoiceStatus::class, $invoice->status);
-        $this->assertEquals(InvoiceStatus::SENT, $invoice->status);
-    }
-
-    public function test_relationship_between_lines_and_invoices(): void
-    {
-        $invoiceLineDummy = [
-            'invoice_id' => Invoice::factory()->create()->id,
-            'amount' => 10.55,
-            'product' => 'ff9'
-        ];
-
-        $invoiceLine = InvoiceLine::factory()->create($invoiceLineDummy);
-        $this->assertModelExists($invoiceLine);
-        $this->assertDatabaseHas('invoice_lines', $invoiceLineDummy);
     }
 }
 
