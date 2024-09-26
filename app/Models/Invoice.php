@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use App\ValueObjects\InvoiceStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\ValueObjects\InvoiceStatus;
 
 class Invoice extends Model
 {

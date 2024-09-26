@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Invoice;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\InvoiceLine>
@@ -18,9 +18,9 @@ class InvoiceLineFactory extends Factory
     public function definition(): array
     {
         return [
-            'invoice_id' => Invoice::factory(), 
-            'product' => $this->faker->word,    
-            'amount' => $this->faker->randomFloat(2, 10, 500),  
+            'invoice_id' => Invoice::factory(),
+            'product' => $this->faker->word,
+            'amount' => $this->faker->randomFloat(2, 10, 500),
         ];
     }
 }

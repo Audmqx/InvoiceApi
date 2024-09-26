@@ -14,13 +14,13 @@ class InvoiceResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-         return [
-             'client' => $this->client, // @phpstan-ignore-line
-             'number' => $this->number, // @phpstan-ignore-line
-             'status' => $this->status->value, // @phpstan-ignore-line
-             'sent_at' => $this->sent_at, // @phpstan-ignore-line
-             'paid_at' => $this->paid_at, // @phpstan-ignore-line 
-             'total' => $this->invoiceLines->sum('amount') // @phpstan-ignore-line
-         ];
+        return [
+            'client' => $this->client, // @phpstan-ignore-line
+            'number' => $this->number, // @phpstan-ignore-line
+            'status' => $this->status->value, // @phpstan-ignore-line
+            'sent_at' => $this->sent_at, // @phpstan-ignore-line
+            'paid_at' => $this->paid_at, // @phpstan-ignore-line
+            'total' => $this->invoiceLines->sum('amount'), // @phpstan-ignore-line
+        ];
     }
 }

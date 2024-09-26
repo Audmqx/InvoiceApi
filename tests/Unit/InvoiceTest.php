@@ -2,11 +2,10 @@
 
 namespace Tests\Unit;
 
-use Tests\TestCase;
-use App\Models\{Invoice, InvoiceLine};
+use App\Models\Invoice;
 use App\ValueObjects\InvoiceStatus;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-
+use Tests\TestCase;
 
 class InvoiceTest extends TestCase
 {
@@ -16,7 +15,7 @@ class InvoiceTest extends TestCase
     {
         $invoice = Invoice::factory()->withLines(50)->create();
         $this->assertModelExists($invoice);
- 
+
         $this->assertCount(50, $invoice->invoiceLines); // @phpstan-ignore-line
         $this->assertDatabaseCount('invoice_lines', 50);
 
@@ -28,7 +27,7 @@ class InvoiceTest extends TestCase
         $this->assertInstanceOf(InvoiceStatus::class, $invoice->status);
     }
 
-   /**
+    /**
      * @dataProvider statusProvider
      */
     public function test_invoice_status(InvoiceStatus $status, string $expectedValue): void
@@ -39,7 +38,7 @@ class InvoiceTest extends TestCase
     /**
      * @return array<array{InvoiceStatus, string}>
      */
-    static public function statusProvider(): array
+    public static function statusProvider(): array
     {
         return [
             [InvoiceStatus::SENT, 'sent'],
@@ -49,5 +48,3 @@ class InvoiceTest extends TestCase
         ];
     }
 }
-
-

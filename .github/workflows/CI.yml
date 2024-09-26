@@ -13,7 +13,7 @@ jobs:
       uses: shivammathur/setup-php@v2
       with:
         php-version: '8.3'
-        extensions: mbstring, pdo_sqlite, xml
+        extensions: mbstring, pdo_sqlite, xml, json, dom, curl, libxml
     - name: Copy .env
       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
     - name: Install Dependencies
@@ -35,3 +35,9 @@ jobs:
       run: vendor/bin/phpunit
     - name: Run Code Analysis
       run: vendor/bin/phpstan analyse --level=max
+    - name: Run Pint
+      run: vendor/bin/pint
+    - name: Commit linted files
+      uses: stefanzweifel/git-auto-commit-action@v5
+      with:
+        commit_message: "Fixes coding style"

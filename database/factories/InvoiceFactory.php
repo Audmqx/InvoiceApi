@@ -2,19 +2,20 @@
 
 namespace Database\Factories;
 
+use App\Models\Invoice;
+use App\Models\InvoiceLine;
+use App\ValueObjects\InvoiceStatus;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
-use Carbon\Carbon;
-use App\ValueObjects\InvoiceStatus;
-use App\Models\{Invoice, InvoiceLine};
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Invoice>
  */
 class InvoiceFactory extends Factory
 {
-
     const JUST_A_LINE = 1;
+
     /**
      * Define the model's default state.
      *
@@ -31,8 +32,6 @@ class InvoiceFactory extends Factory
 
         $sentAt = $status != 'cancelled' ? $this->faker->dateTimeBetween('-30 days', 'now') : null;
         $paidAt = $status == 'paid' ? $this->faker->dateTimeBetween($sentAt, 'now') : null;
-
-        
 
         return [
             'client' => $this->faker->name,
