@@ -1,0 +1,225 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API Documentation",
+        "description": "API documentation for the Invoice system",
+        "contact": {
+            "email": "support@example.com"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/invoices": {
+            "get": {
+                "tags": [
+                    "Invoices"
+                ],
+                "summary": "Get paginated list of invoices",
+                "description": "Returns a paginated list of invoices with associated invoice lines, ordered by sent_at (desc)",
+                "operationId": "0b8e5b661b472432febe76177e627e86",
+                "parameters": [
+                    {
+                        "name": "perPage",
+                        "in": "query",
+                        "description": "Number of invoices to return per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 20
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "invoices": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "client": {
+                                                        "description": "The client associated with the invoice",
+                                                        "type": "string"
+                                                    },
+                                                    "number": {
+                                                        "description": "The invoice number",
+                                                        "type": "string"
+                                                    },
+                                                    "status": {
+                                                        "description": "The status of the invoice",
+                                                        "type": "string",
+                                                        "enum": [
+                                                            "sent",
+                                                            "late",
+                                                            "paid",
+                                                            "cancelled"
+                                                        ]
+                                                    },
+                                                    "sent_at": {
+                                                        "description": "When the invoice was sent",
+                                                        "type": "string",
+                                                        "format": "date-time"
+                                                    },
+                                                    "paid_at": {
+                                                        "description": "When the invoice was paid (nullable)",
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "nullable": true
+                                                    },
+                                                    "total": {
+                                                        "description": "The total amount of the invoice calculated from the lines",
+                                                        "type": "number",
+                                                        "format": "float"
+                                                    },
+                                                    "invoice_lines": {
+                                                        "description": "Lines associated with the invoice",
+                                                        "type": "array",
+                                                        "items": {
+                                                            "$ref": "#/components/schemas/InvoiceLine"
+                                                        }
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "pagination": {
+                                            "properties": {
+                                                "total": {
+                                                    "type": "integer"
+                                                },
+                                                "current_page": {
+                                                    "type": "integer"
+                                                },
+                                                "per_page": {
+                                                    "type": "integer"
+                                                },
+                                                "last_page": {
+                                                    "type": "integer"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No invoices found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "No invoices found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Invoice": {
+                "description": "Invoice model",
+                "properties": {
+                    "id": {
+                        "description": "The unique identifier for the invoice",
+                        "type": "integer"
+                    },
+                    "client": {
+                        "description": "The client associated with the invoice",
+                        "type": "string"
+                    },
+                    "number": {
+                        "description": "The invoice number",
+                        "type": "string"
+                    },
+                    "status": {
+                        "description": "The status of the invoice",
+                        "type": "string",
+                        "enum": [
+                            "sent",
+                            "late",
+                            "paid",
+                            "cancelled"
+                        ]
+                    },
+                    "sent_at": {
+                        "description": "When the invoice was sent",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "paid_at": {
+                        "description": "When the invoice was paid (nullable)",
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "total": {
+                        "description": "The total amount of the invoice calculated from the lines",
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "invoice_lines": {
+                        "description": "Lines associated with the invoice",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/InvoiceLine"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "InvoiceLine": {
+                "description": "Invoice line model",
+                "properties": {
+                    "id": {
+                        "description": "The unique identifier for the invoice line",
+                        "type": "integer"
+                    },
+                    "product": {
+                        "description": "The product or service sold",
+                        "type": "string"
+                    },
+                    "amount": {
+                        "description": "The amount for the product/service",
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "created_at": {
+                        "description": "When the invoice line was created",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "description": "When the invoice line was last updated",
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Invoices",
+            "description": "Invoices"
+        }
+    ]
+}

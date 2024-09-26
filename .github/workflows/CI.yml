@@ -35,9 +35,3 @@ jobs:
       run: vendor/bin/phpunit
     - name: Run Code Analysis
       run: vendor/bin/phpstan analyse --level=max
-    - name: Run Pint
-      run: vendor/bin/pint
-    - name: Commit linted files
-      uses: stefanzweifel/git-auto-commit-action@v5
-      with:
-        commit_message: "Fixes coding style"
