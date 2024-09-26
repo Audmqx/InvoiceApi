@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('client');
             $table->string('number');
             $table->enum('status', ['sent', 'late', 'paid', 'cancelled'])->nullable();
-            $table->dateTime('sent_at')->nullable();
+            $table->dateTime('sent_at');
             $table->dateTime('paid_at')->nullable();
             $table->text('internal_note')->nullable();
             $table->timestamps();
